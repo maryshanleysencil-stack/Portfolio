@@ -1,3 +1,29 @@
+// ========== SCROLL LOCK HELPER FUNCTIONS ==========
+function disableScroll() {
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = getScrollbarWidth() + 'px';
+}
+
+function enableScroll() {
+    document.body.style.overflow = 'auto';
+    document.body.style.paddingRight = '0px';
+}
+
+function getScrollbarWidth() {
+    const outer = document.createElement('div');
+    outer.style.visibility = 'hidden';
+    outer.style.overflow = 'scroll';
+    document.body.appendChild(outer);
+    
+    const inner = document.createElement('div');
+    outer.appendChild(inner);
+    
+    const scrollbarWidth = outer.offsetWidth - inner.offsetWidth;
+    outer.parentNode.removeChild(outer);
+    
+    return scrollbarWidth;
+}
+
 // ========== MOBILE MENU TOGGLE ==========
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
@@ -5,6 +31,13 @@ const navLinks = document.querySelector('.nav-links');
 navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('active');
     navLinks.classList.toggle('active');
+    
+    // Lock scroll when menu is open on mobile
+    if (navToggle.classList.contains('active')) {
+        disableScroll();
+    } else {
+        enableScroll();
+    }
 });
 
 // Close menu when a link is clicked
@@ -12,6 +45,7 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         navToggle.classList.remove('active');
         navLinks.classList.remove('active');
+        enableScroll();
     });
 });
 
