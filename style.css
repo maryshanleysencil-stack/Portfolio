@@ -565,17 +565,22 @@ section {
 /* ========== SKILLS SECTION WITH TILTED CARDS ========== */
 #skills {
     background: linear-gradient(135deg, rgba(107, 79, 79, 0.05) 0%, rgba(200, 162, 124, 0.05) 100%);
-    padding: 80px 40px;
+    padding: 80px 40px !important;
 }
 
 #skills .section-title {
     margin-bottom: 60px;
 }
 
+.skills-grid {
+    display: none !important;
+}
+
 .tools-carousel {
-    display: flex;
+    display: flex !important;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: flex-start;
     gap: 40px;
     margin-top: 50px;
     perspective: 1200px;
@@ -588,6 +593,8 @@ section {
     cursor: pointer;
     transform-style: preserve-3d;
     perspective: 1000px;
+    margin: 0;
+    padding: 0;
 }
 
 .tool-card-inner {
@@ -595,7 +602,7 @@ section {
     height: 100%;
     background: linear-gradient(135deg, #f7f1ea 0%, white 100%);
     border-radius: 15px;
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -609,9 +616,110 @@ section {
 }
 
 .tool-card:hover .tool-card-inner {
-    transform: rotateY(0deg) rotateX(0deg) translateY(-15px);
-    box-shadow: 0 20px 50px rgba(107, 79, 79, 0.25);
+    transform: rotateY(0deg) rotateX(0deg) translateY(-15px) !important;
+    box-shadow: 0 20px 50px rgba(107, 79, 79, 0.25) !important;
     border-color: var(--accent);
+}
+
+.tool-icon {
+    font-size: 4rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary) 0%, #8b6f6f 100%);
+    border-radius: 20px;
+    transition: all 0.4s ease;
+    flex-shrink: 0;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 10px 25px rgba(107, 79, 79, 0.3);
+}
+
+.tool-card h3 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    text-align: center;
+    font-weight: 600;
+    margin: 0 !important;
+    padding: 0;
+    transition: all 0.3s ease;
+    line-height: 1.4;
+}
+
+.tool-card:hover h3 {
+    color: var(--accent);
+}
+
+.tool-label {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.9rem;
+    color: #999;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+    .tools-carousel {
+        gap: 25px;
+    }
+
+    .tool-card {
+        width: 160px;
+        height: 200px;
+    }
+
+    .tool-card-inner {
+        gap: 15px;
+        padding: 20px 15px;
+    }
+
+    .tool-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+    }
+
+    .tool-card h3 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tools-carousel {
+        gap: 15px;
+    }
+
+    .tool-card {
+        width: 130px;
+        height: 170px;
+    }
+
+    .tool-card-inner {
+        gap: 10px;
+        padding: 15px 10px;
+    }
+
+    .tool-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .tool-card h3 {
+        font-size: 0.9rem;
+    }
+
+    .tool-label {
+        font-size: 0.8rem;
+    }
 }
 
 .tool-icon {
