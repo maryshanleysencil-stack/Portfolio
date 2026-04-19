@@ -573,11 +573,15 @@ section {
 }
 
 .skills-logos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 40px;
-    max-width: 900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 50px;
+    max-width: 1200px;
     margin: 0 auto;
+    overflow-x: auto;
+    padding: 20px 0;
 }
 
 .logo-item {
@@ -588,6 +592,8 @@ section {
     text-align: center;
     transition: all 0.3s ease;
     cursor: pointer;
+    flex-shrink: 0;
+    min-width: fit-content;
 }
 
 .logo-item img {
@@ -623,15 +629,15 @@ section {
 
 .contact h2 {
     font-size: 2.5rem;
-    margin-bottom: 40px;
+    margin-bottom: 50px;
     color: white;
 }
 
 .contact-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 40px;
-    max-width: 1200px;
+    max-width: 900px;
     margin: 0 auto 50px;
 }
 
@@ -674,6 +680,7 @@ section {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
+    font-size: 0.95rem;
 }
 
 .contact-form input,
@@ -682,7 +689,7 @@ section {
     padding: 12px 15px;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     color: var(--dark);
     font-family: 'Inter', sans-serif;
     transition: all 0.3s ease;
@@ -703,7 +710,7 @@ section {
 }
 
 .form-group .error {
-    color: var(--danger);
+    color: #ffcccc;
     font-size: 0.8rem;
     margin-top: 5px;
     display: none;
@@ -711,7 +718,7 @@ section {
 
 .form-group input.invalid,
 .form-group textarea.invalid {
-    border-color: var(--danger);
+    border-color: #ff9999;
 }
 
 .form-group input.invalid ~ .error,
@@ -721,7 +728,7 @@ section {
 
 .contact-form .btn {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 15px;
     padding: 14px;
     font-size: 1rem;
 }
@@ -908,8 +915,12 @@ footer {
     }
 
     .skills-logos {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
         gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .logo-item {
+        min-width: auto;
     }
 
     .logo-item img {
@@ -919,6 +930,11 @@ footer {
 
     .logo-item p {
         font-size: 0.85rem;
+    }
+
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
     }
 }
 
@@ -949,7 +965,6 @@ footer {
     }
 
     .skills-logos {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         gap: 20px;
     }
 
@@ -960,6 +975,18 @@ footer {
 
     .logo-item p {
         font-size: 0.75rem;
+    }
+
+    .contact h2 {
+        font-size: 1.8rem;
+    }
+
+    .contact-content {
+        gap: 20px;
+    }
+
+    .contact-info p {
+        font-size: 0.85rem;
     }
 }
 
