@@ -578,7 +578,7 @@ section {
     align-items: center;
     flex-wrap: nowrap;
     gap: 50px;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     overflow-x: auto;
     padding: 20px 0;
@@ -906,6 +906,11 @@ footer {
         padding: 30px 20px;
     }
 
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
     .scroll-to-top {
         width: 40px;
         height: 40px;
@@ -930,11 +935,6 @@ footer {
 
     .logo-item p {
         font-size: 0.85rem;
-    }
-
-    .contact-content {
-        grid-template-columns: 1fr;
-        gap: 30px;
     }
 }
 
@@ -979,10 +979,6 @@ footer {
 
     .contact h2 {
         font-size: 1.8rem;
-    }
-
-    .contact-content {
-        gap: 20px;
     }
 
     .contact-info p {
