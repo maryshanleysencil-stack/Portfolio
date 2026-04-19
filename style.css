@@ -562,31 +562,7 @@ section {
     color: #bbb;
 }
 
-/* SKILLS (FIXED SECTION) */
-.skills-logos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 40px;
-    justify-items: center;
-    max-width: 800px;
-    margin: auto;
-}
-
-.logo-item {
-    text-align: center;
-}
-
-.logo-item img {
-    width: 70px;
-    height: 70px;
-    object-fit: contain;
-    margin-bottom: 10px;
-}
-
-.logo-item p {
-    font-size: 0.9rem;
-    color: var(--primary);
-}
+/* ========== SKILLS SECTION - CLEAN LOGOS ========== */ #skills { background: linear-gradient(135deg, rgba(107, 79, 79, 0.03) 0%, rgba(200, 162, 124, 0.03) 100%); padding: 80px 40px; } #skills .section-title { margin-bottom: 60px; } .skills-logos { display: flex; justify-content: center; align-items: center; flex-wrap: nowrap; gap: 50px; max-width: 1400px; margin: 0 auto; overflow-x: auto; padding: 20px 0; } .logo-item { display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; transition: all 0.3s ease; cursor: pointer; flex-shrink: 0; min-width: fit-content; } .logo-item img { width: 100px; height: 100px; object-fit: contain; transition: all 0.3s ease; } .logo-item:hover img { transform: scale(1.1); } .logo-item p { font-size: 0.95rem; color: var(--primary); font-weight: 600; margin: 0; transition: color 0.3s ease; } .logo-item:hover p { color: var(--accent); }
 /* ========== CONTACT SECTION ========== */
 .contact {
     background: linear-gradient(135deg, var(--primary) 0%, #8b6f6f 100%);
