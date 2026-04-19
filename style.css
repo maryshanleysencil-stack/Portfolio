@@ -562,57 +562,156 @@ section {
     color: #bbb;
 }
 
-/* ========== SKILLS SECTION ========== */
+/* ========== SKILLS SECTION WITH TILTED CARDS ========== */
 #skills {
-    background: var(--light);
+    background: linear-gradient(135deg, rgba(107, 79, 79, 0.05) 0%, rgba(200, 162, 124, 0.05) 100%);
+    padding: 80px 40px;
 }
 
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+#skills .section-title {
+    margin-bottom: 60px;
+}
+
+.tools-carousel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
     margin-top: 50px;
+    perspective: 1200px;
 }
 
-.skill-item {
-    background: white;
-    padding: 30px;
+.tool-card {
+    position: relative;
+    width: 200px;
+    height: 240px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.tool-card-inner {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f7f1ea 0%, white 100%);
     border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 30px 20px;
+    position: relative;
+    transform: rotateY(-15deg) rotateX(5deg);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: -10px 10px 30px rgba(107, 79, 79, 0.15);
+    border: 2px solid rgba(200, 162, 124, 0.2);
+}
+
+.tool-card:hover .tool-card-inner {
+    transform: rotateY(0deg) rotateX(0deg) translateY(-15px);
+    box-shadow: 0 20px 50px rgba(107, 79, 79, 0.25);
+    border-color: var(--accent);
+}
+
+.tool-icon {
+    font-size: 4rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary) 0%, #8b6f6f 100%);
+    border-radius: 20px;
+    color: white;
+    transition: all 0.4s ease;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 10px 25px rgba(107, 79, 79, 0.3);
+}
+
+.tool-card h3 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    text-align: center;
+    font-weight: 600;
+    margin: 0;
     transition: all 0.3s ease;
 }
 
-.skill-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+.tool-card:hover h3 {
+    color: var(--accent);
 }
 
-.skill-name {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+.tool-label {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.9rem;
+    color: #999;
     font-weight: 600;
+    letter-spacing: 2px;
+    margin: 0;
 }
 
-.skill-bar {
-    width: 100%;
-    height: 8px;
-    background: #e8ddd2;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
+/* Responsive Design for Tools */
+@media (max-width: 768px) {
+    .tools-carousel {
+        gap: 25px;
+    }
+
+    .tool-card {
+        width: 160px;
+        height: 200px;
+    }
+
+    .tool-card-inner {
+        gap: 15px;
+        padding: 20px 15px;
+    }
+
+    .tool-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+    }
+
+    .tool-card h3 {
+        font-size: 1rem;
+    }
 }
 
-.skill-progress {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent) 0%, #d4b896 100%);
-    border-radius: 10px;
-    transition: width 2s ease;
-    width: 0;
-}
+@media (max-width: 480px) {
+    .tools-carousel {
+        gap: 15px;
+    }
 
-.skill-item.animated .skill-progress {
-    width: var(--progress);
+    .tool-card {
+        width: 130px;
+        height: 170px;
+    }
+
+    .tool-card-inner {
+        gap: 10px;
+        padding: 15px 10px;
+    }
+
+    .tool-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .tool-card h3 {
+        font-size: 0.9rem;
+    }
+
+    .tool-label {
+        font-size: 0.8rem;
+    }
 }
 
 /* ========== CONTACT SECTION ========== */
