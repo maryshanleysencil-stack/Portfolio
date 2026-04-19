@@ -562,7 +562,7 @@ section {
     color: #bbb;
 }
 
-/* ========== SKILLS SECTION - CLEAN LOGO GRID ========== */
+/* ========== SKILLS SECTION - TOOL ICONS ========== */
 #skills {
     background: linear-gradient(135deg, rgba(107, 79, 79, 0.03) 0%, rgba(200, 162, 124, 0.03) 100%);
     padding: 80px 40px;
@@ -594,7 +594,6 @@ section {
 .tool-logo-wrapper {
     width: 120px;
     height: 120px;
-    background: white;
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -602,7 +601,8 @@ section {
     box-shadow: 0 8px 24px rgba(107, 79, 79, 0.08);
     border: 1.5px solid rgba(200, 162, 124, 0.15);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: hidden;
+    font-size: 3.5rem;
+    color: white;
 }
 
 .tool-item:hover .tool-logo-wrapper {
@@ -611,15 +611,29 @@ section {
     border-color: var(--accent);
 }
 
-.tool-logo {
-    width: 75%;
-    height: 75%;
-    object-fit: contain;
-    transition: all 0.3s ease;
+/* Brand Colors */
+.word-bg {
+    background: linear-gradient(135deg, #2B579A 0%, #4472C4 100%);
 }
 
-.tool-item:hover .tool-logo {
-    transform: scale(1.1);
+.excel-bg {
+    background: linear-gradient(135deg, #107C41 0%, #1F8E4D 100%);
+}
+
+.canva-bg {
+    background: linear-gradient(135deg, #00C4CC 0%, #00B4E8 100%);
+}
+
+.figma-bg {
+    background: linear-gradient(135deg, #F24E1E 0%, #A259FF 100%);
+}
+
+.powerpoint-bg {
+    background: linear-gradient(135deg, #D83B01 0%, #ED8936 100%);
+}
+
+.capcut-bg {
+    background: linear-gradient(135deg, #121212 0%, #1A1A1A 100%);
 }
 
 .tool-item h3 {
@@ -636,11 +650,8 @@ section {
     color: var(--accent);
 }
 
-/* Hide old carousel styles */
-.tools-carousel {
-    display: none !important;
-}
-
+/* Hide old styles */
+.tools-carousel,
 .skills-grid {
     display: none !important;
 }
@@ -655,10 +666,54 @@ section {
     .tool-logo-wrapper {
         width: 110px;
         height: 110px;
+        font-size: 3rem;
     }
     
     .tool-item h3 {
         font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #skills {
+        padding: 60px 20px;
+    }
+
+    .tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 35px 25px;
+    }
+
+    .tool-logo-wrapper {
+        width: 100px;
+        height: 100px;
+        font-size: 2.5rem;
+    }
+
+    .tool-item h3 {
+        font-size: 0.85rem;
+    }
+
+    #skills .section-title {
+        margin-bottom: 50px;
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tools-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 30px 20px;
+    }
+
+    .tool-logo-wrapper {
+        width: 85px;
+        height: 85px;
+        font-size: 2rem;
+    }
+
+    .tool-item h3 {
+        font-size: 0.75rem;
     }
 }
 
