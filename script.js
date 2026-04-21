@@ -1,3 +1,29 @@
+// ========== FIRST PAGE SCROLL LOCK ==========
+document.addEventListener('scroll', function() {
+    const firstPage = document.querySelector('.hero');
+    const windowHeight = window.innerHeight;
+
+    // Lock the first page during scroll
+    if (window.scrollY < windowHeight) {
+        firstPage.style.position = 'fixed';
+        firstPage.style.top = '0';
+    } else {
+        firstPage.style.position = 'relative';
+    }
+});
+
+// ========== SMOOTH SCROLL SETUP ==========
+const links = document.querySelectorAll('a[href^="#"]');
+for (const link of links) {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+}
+
 // ========== PORTFOLIO FILTER FUNCTIONALITY WITH SMOOTH TRANSITIONS ==========
 document.addEventListener('DOMContentLoaded', function() {
     const portfolioItems = document.querySelectorAll('.portfolio-item');
@@ -6,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Click on portfolio item to show details
     portfolioItems.forEach(item => {
         item.addEventListener('click', function(e) {
-            // Don't trigger if clicking close button
             if (e.target.closest('.close-details')) return;
             
             const details = this.querySelector('.portfolio-details');
@@ -39,49 +64,48 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             
-            // Update active button
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
             const filter = this.dataset.filter;
             let visibleCount = 0;
 
-            // First pass: fade out items and hide non-matching ones
-            portfolioItems.forEach((item, index) => {
-                const isMatch = (filter === 'all' || item.dataset.category === filter);
-
-                if (isMatch) {
-                    visibleCount++;
-                }
-
-                // Set transition
+            // Fade out all items first
+            portfolioItems.forEach(item => {
                 item.style.transition = 'opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                
-                if (isMatch) {
-                    // Show the item
-                    item.style.display = 'block';
-                    item.style.pointerEvents = 'auto';
-                    
-                    // Staggered fade in
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                        item.style.transform = 'scale(1) translateY(0)';
-                    }, index * 40);
-                } else {
-                    // Hide the item
-                    item.style.opacity = '0';
-                    item.style.transform = 'scale(0.9) translateY(20px)';
-                    item.style.pointerEvents = 'none';
-                    
-                    setTimeout(() => {
-                        if (item.style.opacity === '0') {
-                            item.style.display = 'none';
-                        }
-                    }, 400);
-                }
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.9) translateY(20px)';
+                item.style.pointerEvents = 'none';
             });
 
-            console.log(`Showing ${visibleCount} projects for filter: ${filter}`);
+            // After fade out, hide and re-show
+            setTimeout(() => {
+                portfolioItems.forEach((item, index) => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.classList.remove('hidden');
+                        item.style.display = 'block';
+                        item.style.pointerEvents = 'auto';
+                        visibleCount++;
+
+                        // Staggered fade in
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1) translateY(0)';
+                        }, index * 50);
+                    } else {
+                        item.classList.add('hidden');
+                        item.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            if (item.classList.contains('hidden')) {
+                                item.style.display = 'none';
+                            }
+                        }, 400);
+                    }
+                });
+
+                console.log(`Showing ${visibleCount} projects for filter: ${filter}`);
+            }, 300);
         });
     });
 
@@ -118,38 +142,27 @@ if (navLinks) {
     });
 }
 
-// ========== SMOOTH SCROLLING ==========
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href === '#') return;
-        
-        const target = document.querySelector(href);
-        if (target) {
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    });
-});
-
 // ========== SCROLL TO TOP BUTTON ==========
 const scrollToTopBtn = document.getElementById('scrollToTop');
 
-window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 300) {
-        scrollToTopBtn.classList.add('show');
-    } else {
-        scrollToTopBtn.classList.remove('show');
-    }
-});
-
 if (scrollToTopBtn) {
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('show');
+        } else {
+            scrollToTopBtn.classList.remove('show');
+        }
+    });
+
     scrollToTopBtn.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 }
 
-// ========== FORM VALIDATION ==========
+// ========== FORM VALIDATION & SUBMISSION ==========
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', function(e) {
@@ -170,6 +183,7 @@ if (contactForm) {
         }
     });
 
+    // Remove invalid state when user starts typing
     const inputs = contactForm.querySelectorAll('input, textarea');
     inputs.forEach(input => {
         input.addEventListener('input', function() {
@@ -187,4 +201,19 @@ document.addEventListener('keydown', function(e) {
             document.body.style.overflow = 'auto';
         }
     }
+});
+
+// ========== PREVENT SCROLL WHEN MODAL IS OPEN ==========
+const portfolioDetails = document.querySelectorAll('.portfolio-details');
+
+portfolioDetails.forEach(modal => {
+    const observer = new MutationObserver(function() {
+        if (modal.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
 });
