@@ -24,34 +24,14 @@ for (const link of links) {
     });
 }
 
-// ========== PORTFOLIO FILTER FUNCTIONALITY ==========
+// ========== PORTFOLIO FILTER FUNCTIONALITY WITH SMOOTH TRANSITIONS ==========
 document.addEventListener('DOMContentLoaded', function() {
     const portfolioItems = document.querySelectorAll('.portfolio-item');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
-    // Count projects by category
-    const categoryCounts = {
-        'social-media': 0,
-        'content': 0,
-        'projects': 0,
-        'all': 0
-    };
-
-    portfolioItems.forEach(item => {
-        categoryCounts['all']++;
-        const category = item.dataset.category;
-        if (category) {
-            categoryCounts[category]++;
-        }
-    });
-
-    console.log('Portfolio Counts:', categoryCounts);
-    // Output: Social Media: 5, Content: 5, Projects: 10, All: 20
-
     // Click on portfolio item to show details
     portfolioItems.forEach(item => {
         item.addEventListener('click', function(e) {
-            // Don't trigger if clicking close button
             if (e.target.closest('.close-details')) return;
             
             const details = this.querySelector('.portfolio-details');
@@ -76,47 +56,133 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Filter functionality
+    // Filter functionality with smooth transitions
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            // Update active button
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
             const filter = this.dataset.filter;
-            let visibleCount = 0;
 
-            // Show/hide items based on filter
+            // Fade out all items first
             portfolioItems.forEach(item => {
-                if (filter === 'all' || item.dataset.category === filter) {
-                    item.style.display = 'block';
-                    item.style.opacity = '0';
-                    visibleCount++;
-                    
-                    setTimeout(() => {
-                        item.style.opacity = '1';
-                        item.style.transition = 'opacity 0.3s ease';
-                    }, 10);
-                } else {
-                    item.style.opacity = '0';
-                    setTimeout(() => {
-                        item.style.display = 'none';
-                    }, 300);
-                }
+                item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.9) translateY(20px)';
             });
 
-            console.log(`Showing ${visibleCount} projects for filter: ${filter}`);
+            // After fade out, hide and re-show
+            setTimeout(() => {
+                let visibleCount = 0;
+
+                portfolioItems.forEach((item, index) => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.classList.remove('hidden');
+                        item.style.display = 'block';
+                        visibleCount++;
+
+                        // Staggered fade in
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1) translateY(0)';
+                        }, index * 50);
+                    } else {
+                        item.classList.add('hidden');
+                        item.style.display = 'none';
+                    }
+                });
+
+                console.log(`Showing ${visibleCount} projects for filter: ${filter}`);
+            }, 300);
         });
     });
 
     // Trigger 'All Projects' on page load
     const allBtn = document.querySelector('[data-filter="all"]');
     if (allBtn) {
-        allBtn.click();
+        setTimeout(() => {
+            allBtn.click();
+        }, 100);
     }
 });
 
-// Close modal on ESC key
+// ========== NAVIGATION TOGGLE ==========
+const navToggle = document.querySelector('.nav-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (navToggle) {
+    navToggle.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+        navToggle.classList.toggle('active');
+    });
+}
+
+// Close menu when clicking a link
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', function() {
+        navLinks.classList.remove('active');
+        navToggle.classList.remove('active');
+    });
+});
+
+// ========== SMOOTH SCROLLING ==========
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+});
+
+// ========== SCROLL TO TOP BUTTON ==========
+const scrollToTopBtn = document.getElementById('scrollToTop');
+
+window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('show');
+    } else {
+        scrollToTopBtn.classList.remove('show');
+    }
+});
+
+if (scrollToTopBtn) {
+    scrollToTopBtn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
+
+// ========== FORM VALIDATION ==========
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        const inputs = this.querySelectorAll('input, textarea');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                input.classList.add('invalid');
+                isValid = false;
+            } else {
+                input.classList.remove('invalid');
+            }
+        });
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+
+    const inputs = contactForm.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('invalid');
+        });
+    });
+}
+
+// ========== CLOSE MODAL ON ESC KEY ==========
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         const activeModal = document.querySelector('.portfolio-details.active');
@@ -126,7 +192,6 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
-
 // ========== NAVIGATION TOGGLE ==========
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
