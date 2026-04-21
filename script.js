@@ -24,10 +24,29 @@ for (const link of links) {
     });
 }
 
-// ========== PORTFOLIO DETAILS FUNCTIONALITY ==========
+// ========== PORTFOLIO FILTER FUNCTIONALITY ==========
 document.addEventListener('DOMContentLoaded', function() {
     const portfolioItems = document.querySelectorAll('.portfolio-item');
     const filterBtns = document.querySelectorAll('.filter-btn');
+
+    // Count projects by category
+    const categoryCounts = {
+        'social-media': 0,
+        'content': 0,
+        'projects': 0,
+        'all': 0
+    };
+
+    portfolioItems.forEach(item => {
+        categoryCounts['all']++;
+        const category = item.dataset.category;
+        if (category) {
+            categoryCounts[category]++;
+        }
+    });
+
+    console.log('Portfolio Counts:', categoryCounts);
+    // Output: Social Media: 5, Content: 5, Projects: 10, All: 20
 
     // Click on portfolio item to show details
     portfolioItems.forEach(item => {
@@ -65,13 +84,18 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
 
             const filter = this.dataset.filter;
+            let visibleCount = 0;
 
             // Show/hide items based on filter
             portfolioItems.forEach(item => {
                 if (filter === 'all' || item.dataset.category === filter) {
                     item.style.display = 'block';
+                    item.style.opacity = '0';
+                    visibleCount++;
+                    
                     setTimeout(() => {
                         item.style.opacity = '1';
+                        item.style.transition = 'opacity 0.3s ease';
                     }, 10);
                 } else {
                     item.style.opacity = '0';
@@ -80,8 +104,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 300);
                 }
             });
+
+            console.log(`Showing ${visibleCount} projects for filter: ${filter}`);
         });
     });
+
+    // Trigger 'All Projects' on page load
+    const allBtn = document.querySelector('[data-filter="all"]');
+    if (allBtn) {
+        allBtn.click();
+    }
+});
+
+// Close modal on ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const activeModal = document.querySelector('.portfolio-details.active');
+        if (activeModal) {
+            activeModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    }
 });
 
 // ========== NAVIGATION TOGGLE ==========
