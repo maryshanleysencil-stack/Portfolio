@@ -15,14 +15,12 @@ function initializeNavigation() {
 
     if (!navToggle || !navLinks) return;
 
-    // Toggle mobile menu
     navToggle.addEventListener('click', function(e) {
         e.stopPropagation();
         navLinks.classList.toggle('active');
         navToggle.classList.toggle('active');
     });
 
-    // Close menu when clicking a nav link
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', function() {
             navLinks.classList.remove('active');
@@ -30,7 +28,6 @@ function initializeNavigation() {
         });
     });
 
-    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -52,13 +49,11 @@ function initializePortfolio() {
 
     if (filterBtns.length === 0) return;
 
-    // Add click event to filter buttons
     filterBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
 
-            // Update active button
             filterBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
@@ -67,28 +62,21 @@ function initializePortfolio() {
         });
     });
 
-    // Trigger 'All Projects' on page load
     setTimeout(() => {
         const allBtn = document.querySelector('[data-filter="all"]');
-        if (allBtn) {
-            allBtn.click();
-        }
+        if (allBtn) allBtn.click();
     }, 200);
 }
 
-// Filter portfolio items with smooth animation
 function filterPortfolioItems(items, filter) {
     let visibleCount = 0;
 
-    // Fade out phase
     items.forEach(item => {
-        item.style.transition = 'opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
         item.style.opacity = '0';
         item.style.transform = 'scale(0.9) translateY(20px)';
         item.style.pointerEvents = 'none';
     });
 
-    // Fade in phase
     setTimeout(() => {
         items.forEach((item, index) => {
             const isMatch = (filter === 'all' || item.dataset.category === filter);
@@ -99,7 +87,6 @@ function filterPortfolioItems(items, filter) {
                 item.style.pointerEvents = 'auto';
                 visibleCount++;
 
-                // Staggered animation
                 setTimeout(() => {
                     item.style.opacity = '1';
                     item.style.transform = 'scale(1) translateY(0)';
@@ -124,101 +111,70 @@ function filterPortfolioItems(items, filter) {
 function initializeModals() {
     const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-    if (portfolioItems.length === 0) {
-        console.log('No portfolio items found');
-        return;
-    }
+    if (portfolioItems.length === 0) return;
 
-    console.log(`Initializing modals for ${portfolioItems.length} items`);
-
-    // Open modal on project click
-    portfolioItems.forEach((item, index) => {
+    portfolioItems.forEach((item) => {
         item.addEventListener('click', function(e) {
-            // Don't open if clicking close button
-            if (e.target.closest('.close-details')) return;
+
+            // ❌ FIX: Prevent blocking clicks on inner elements
+            if (e.target.closest('.portfolio-details') || e.target.closest('.close-details')) return;
 
             const details = this.querySelector('.portfolio-details');
             const detailsContent = this.querySelector('.details-content');
             const img = this.querySelector('img');
-            
-            if (details && img) {
+
+            if (details) {
                 e.stopPropagation();
-                
-                // Set the background image from the portfolio item
-                detailsContent.style.backgroundImage = `url('${img.src}')`;
-                detailsContent.style.backgroundPosition = 'left center';
-                detailsContent.style.backgroundSize = 'cover';
-                detailsContent.style.backgroundRepeat = 'no-repeat';
-                detailsContent.style.backgroundAttachment = 'fixed';
-                
+
+                // ❌ FIX: REMOVE background image override (this was breaking layout + clicks)
+                if (detailsContent) {
+                    detailsContent.style.backgroundImage = 'none';
+                }
+
                 details.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                console.log(`Modal opened for item ${index + 1}`);
             }
         });
     });
 
-    // Close modal on close button click
+    // Close modal (button)
     document.addEventListener('click', function(e) {
         if (e.target.closest('.close-details')) {
             e.preventDefault();
             e.stopPropagation();
             const modal = e.target.closest('.portfolio-details');
-            if (modal) {
-                closeModal(modal);
-                console.log('Modal closed via close button');
-            }
+            if (modal) closeModal(modal);
         }
     });
 
-    // Close modal on background/overlay click
+    // Close modal (background)
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('portfolio-details') && e.target.classList.contains('active')) {
-            e.stopPropagation();
             closeModal(e.target);
-            console.log('Modal closed via background click');
         }
     });
 
-    // Close on ESC key
+    // ESC key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             const activeModal = document.querySelector('.portfolio-details.active');
-            if (activeModal) {
-                closeModal(activeModal);
-                console.log('Modal closed via ESC key');
-            }
+            if (activeModal) closeModal(activeModal);
         }
-    });
-
-    // Prevent scroll when modal is open
-    const modals = document.querySelectorAll('.portfolio-details');
-    modals.forEach(modal => {
-        const observer = new MutationObserver(function() {
-            if (modal.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = 'auto';
-            }
-        });
-        observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
     });
 }
 
-// Close modal helper function
 function closeModal(modal) {
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = 'auto';
     }
 }
-// ========== SCROLL TO TOP BUTTON ==========
+
+// ========== SCROLL TO TOP ==========
 function initializeScrollToTop() {
     const scrollToTopBtn = document.getElementById('scrollToTop');
-
     if (!scrollToTopBtn) return;
 
-    // Show/hide button on scroll
     window.addEventListener('scroll', function() {
         if (window.pageYOffset > 300) {
             scrollToTopBtn.classList.add('show');
@@ -227,22 +183,16 @@ function initializeScrollToTop() {
         }
     });
 
-    // Scroll to top on click
     scrollToTopBtn.addEventListener('click', function() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
 
 // ========== FORM VALIDATION ==========
 function initializeFormValidation() {
     const contactForm = document.querySelector('.contact-form');
-
     if (!contactForm) return;
 
-    // Validate on submit
     contactForm.addEventListener('submit', function(e) {
         const inputs = this.querySelectorAll('input, textarea');
         let isValid = true;
@@ -256,30 +206,23 @@ function initializeFormValidation() {
             }
         });
 
-        if (!isValid) {
-            e.preventDefault();
-        }
+        if (!isValid) e.preventDefault();
     });
 
-    // Remove error on input
-    const inputs = contactForm.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
+    contactForm.querySelectorAll('input, textarea').forEach(input => {
         input.addEventListener('input', function() {
             this.classList.remove('invalid');
         });
     });
 }
 
-// ========== UTILITY FUNCTIONS ==========
-
-// Smooth scroll to element
+// ========== UTIL ==========
 function smoothScrollTo(element) {
     if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
-// Log portfolio statistics
 function logPortfolioStats() {
     const items = document.querySelectorAll('.portfolio-item');
     const categories = {};
