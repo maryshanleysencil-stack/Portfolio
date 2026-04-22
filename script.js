@@ -138,8 +138,19 @@ function initializeModals() {
             if (e.target.closest('.close-details')) return;
 
             const details = this.querySelector('.portfolio-details');
-            if (details) {
+            const detailsContent = this.querySelector('.details-content');
+            const img = this.querySelector('img');
+            
+            if (details && img) {
                 e.stopPropagation();
+                
+                // Set the background image from the portfolio item
+                detailsContent.style.backgroundImage = `url('${img.src}')`;
+                detailsContent.style.backgroundPosition = 'left center';
+                detailsContent.style.backgroundSize = 'cover';
+                detailsContent.style.backgroundRepeat = 'no-repeat';
+                detailsContent.style.backgroundAttachment = 'fixed';
+                
                 details.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 console.log(`Modal opened for item ${index + 1}`);
@@ -180,7 +191,7 @@ function initializeModals() {
         }
     });
 
-    // Prevent scroll when modal is open using MutationObserver
+    // Prevent scroll when modal is open
     const modals = document.querySelectorAll('.portfolio-details');
     modals.forEach(modal => {
         const observer = new MutationObserver(function() {
@@ -201,7 +212,6 @@ function closeModal(modal) {
         document.body.style.overflow = 'auto';
     }
 }
-
 // ========== SCROLL TO TOP BUTTON ==========
 function initializeScrollToTop() {
     const scrollToTopBtn = document.getElementById('scrollToTop');
