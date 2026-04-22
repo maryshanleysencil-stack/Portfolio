@@ -128,29 +128,39 @@ function initializeModals() {
     // Open modal on project click
     portfolioItems.forEach(item => {
         item.addEventListener('click', function(e) {
+            // Check if close button or any child of details was clicked
             if (e.target.closest('.close-details')) return;
+            if (e.target.closest('.portfolio-details')) return;
 
             const details = this.querySelector('.portfolio-details');
             if (details) {
+                e.stopPropagation();
                 details.classList.add('active');
                 document.body.style.overflow = 'hidden';
+                console.log('Modal opened');
             }
         });
     });
 
-    // Close modal handlers
+    // Close modal on close button click
     document.addEventListener('click', function(e) {
-        // Close on close button click
         if (e.target.closest('.close-details')) {
-            const details = e.target.closest('.portfolio-details');
-            if (details) {
-                closeModal(details);
+            e.preventDefault();
+            e.stopPropagation();
+            const modal = e.target.closest('.portfolio-details');
+            if (modal) {
+                closeModal(modal);
+                console.log('Modal closed via button');
             }
         }
+    });
 
-        // Close on background click
-        if (e.target.classList.contains('portfolio-details')) {
+    // Close modal on background/overlay click
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('portfolio-details') && e.target.classList.contains('active')) {
+            e.stopPropagation();
             closeModal(e.target);
+            console.log('Modal closed via background');
         }
     });
 
@@ -160,6 +170,7 @@ function initializeModals() {
             const activeModal = document.querySelector('.portfolio-details.active');
             if (activeModal) {
                 closeModal(activeModal);
+                console.log('Modal closed via ESC');
             }
         }
     });
@@ -185,7 +196,6 @@ function closeModal(modal) {
         document.body.style.overflow = 'auto';
     }
 }
-
 // ========== SCROLL TO TOP BUTTON ==========
 function initializeScrollToTop() {
     const scrollToTopBtn = document.getElementById('scrollToTop');
