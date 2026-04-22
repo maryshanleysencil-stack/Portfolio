@@ -423,11 +423,15 @@ section {
     cursor: pointer;
     background: #ddd;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    opacity: 0;
-    transform: scale(0.9) translateY(20px);
-    transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
     pointer-events: auto;
+}
+
+.portfolio-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.14);
 }
 
 .portfolio-item.hidden {
@@ -435,24 +439,10 @@ section {
     pointer-events: none;
 }
 
-@keyframes portfolioFadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9) translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
 .portfolio-item::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: linear-gradient(135deg, rgba(107, 79, 79, 0.8) 0%, rgba(200, 162, 124, 0.8) 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -468,12 +458,13 @@ section {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: opacity 0.3s;
+    transition: transform 0.35s ease, opacity 0.35s ease;
     pointer-events: none;
 }
 
 .portfolio-item:hover img {
-    opacity: 0.8;
+    opacity: 0.82;
+    transform: scale(1.04);
 }
 
 .portfolio-overlay {
@@ -482,16 +473,15 @@ section {
     left: 0;
     right: 0;
     padding: 25px 20px;
-    background: rgba(255, 248, 240, 0.95); /* FIXED */
+    background: rgba(255, 248, 240, 0.95);
     backdrop-filter: blur(8px);
     transform: translateY(100%);
     transition: all 0.4s ease;
     z-index: 3;
     color: var(--dark);
-    border-top: 1px solid rgba(200,162,124,0.3);
+    border-top: 1px solid rgba(200, 162, 124, 0.3);
     pointer-events: none;
 }
-
 
 .portfolio-item:hover .portfolio-overlay {
     transform: translateY(0);
@@ -504,222 +494,108 @@ section {
 }
 
 .portfolio-overlay p {
-    font-size: 0.9rem;
-    color: #ddd;
+    font-size: 0.92rem;
+    color: #5f524b;
+    line-height: 1.5;
 }
 
-/* ========== PORTFOLIO DETAILS MODAL ========== */
-.portfolio-details {
-    display: none;
+/* ========== NEW PROJECT MODAL ========== */
+.project-modal {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(247, 241, 234, 0.95); /* FIXED */
-    backdrop-filter: blur(10px);
-    z-index: 2000;
+    inset: 0;
+    display: none;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    overflow-y: auto;
+    z-index: 9999;
 }
 
-.portfolio-details.active {
-    display: flex !important;
-    animation: fadeIn 0.3s ease;
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(47, 35, 32, 0.72);
+    backdrop-filter: blur(6px);
 }
 
-.details-content {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 900px;
-    width: 100%;
+.modal-content {
+    position: relative;
+    z-index: 2;
+    width: min(700px, 92vw);
     max-height: 85vh;
     overflow-y: auto;
-    position: relative;
-    animation: slideUp 0.3s ease;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    display: block;
+    background: #fffaf5;
+    color: var(--dark);
+    padding: 32px 28px;
+    border-radius: 20px;
+    box-shadow: 0 25px 70px rgba(47, 35, 32, 0.25);
+    border: 1px solid rgba(200, 162, 124, 0.35);
+    animation: modalPop 0.25s ease;
 }
 
-/* Left side - Image from portfolio item */
-.details-content::before {
-    content: '';
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-body h4 {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 18px;
+    line-height: 1.25;
+}
+
+.modal-body p {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #5a4d47;
+    margin-bottom: 14px;
+}
+
+.modal-body strong {
+    color: var(--primary);
+}
+
+.modal-close {
     position: absolute;
-    left: 60px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: calc(50% - 40px);
-    height: 500px;
-    background: url() center/cover;
-    border-radius: 10px;
-    z-index: 0;
-}
-
-
-}
-
-.details-content {
-    padding-left: calc(50% + 40px);
-}
-
-.project-info {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    z-index: 1;
-    position: relative;
-}
-
-.details-content h4 {
-    font-size: 36px;
-    color: var(--primary); /* FIXED */
-    margin: 0 0 20px 0;
-    text-transform: uppercase;
-    font-family: 'Playfair Display', serif;
-    line-height: 1.2;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.info-block p,
-.info-block li {
-    color: #555; /* FIXED */
-}
-
-.info-block h5 {
-    font-size: 13px;
-    color: var(--accent);
-    margin: 0 0 12px 0;
-    text-transform: uppercase;
-    font-weight: 700;
-    letter-spacing: 2px;
-}
-
-.info-block p {
-    color: #e0e0e0;
-    line-height: 1.7;
-    margin: 0;
-    font-size: 15px;
-}
-
-.info-block ul {
-    margin: 0;
-    padding-left: 0;
-    color: #e0e0e0;
-    list-style: none;
-}
-
-.info-block li {
-    margin: 0 0 10px 0;
-    line-height: 1.7;
-    list-style: none;
-    font-size: 15px;
-    color: #e0e0e0;
-    padding-left: 0;
-}
-
-.info-block li::before {
-    content: '•';
-    color: var(--accent);
-    margin-right: 10px;
-}
-
-.close-details {
-    position: absolute;
-    top: 40px;
-    right: 60px;
-    background: transparent;
-    color: var(--primary); /* FIXED */
-    border: 2px solid var(--primary); /* FIXED */
-    width: 40px;
-    height: 40px;
-    border-radius: 0;
-    font-size: 24px;
+    top: 12px;
+    right: 14px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(107, 79, 79, 0.08);
+    color: var(--primary);
+    font-size: 1.6rem;
+    line-height: 1;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    z-index: 2002;
-    padding: 0;
+    transition: all 0.25s ease;
 }
 
-.close-details:hover {
-    background: var(--primary); /* FIXED */
-    color: white; /* FIXED */
+.modal-close:hover {
+    background: var(--primary);
+    color: white;
+    transform: rotate(90deg);
 }
 
-/* Scrollbar styling for modal */
-.details-content::-webkit-scrollbar {
+.modal-content::-webkit-scrollbar {
     width: 8px;
 }
 
-.details-content::-webkit-scrollbar-track {
+.modal-content::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.details-content::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 4px;
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(200, 162, 124, 0.8);
+    border-radius: 999px;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-    .details-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        padding: 40px;
-        padding-top: 60px;
-    }
-
-    .details-content {
-        padding-left: 40px;
-    }
-
-    .details-content h4 {
-        font-size: 24px;
-    }
-
-    .close-details {
-        top: 20px;
-        right: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .details-content {
-        padding: 25px;
-        max-height: 90vh;
-    }
-
-    .details-content::before {
-        height: 300px;
-    }
-
-    .details-content h4 {
-        font-size: 18px;
-    }
-
-    .info-block h5 {
-        font-size: 12px;
-    }
-
-    .info-block p,
-    .info-block li {
-        font-size: 14px;
-    }
-
-    .close-details {
-        width: 35px;
-        height: 35px;
-        font-size: 20px;
-        top: 15px;
-        right: 15px;
-    }
-}
 /* ========== TESTIMONIALS SECTION ========== */
 #testimonials {
     background: linear-gradient(135deg, var(--primary) 0%, #8b6f6f 100%);
@@ -797,7 +673,7 @@ section {
     color: #bbb;
 }
 
-/* ========== SKILLS SECTION - CLEAN LOGOS ========== */
+/* ========== SKILLS SECTION ========== */
 #skills {
     background: linear-gradient(135deg, rgba(107, 79, 79, 0.03) 0%, rgba(200, 162, 124, 0.03) 100%);
     padding: 80px 40px;
@@ -1141,13 +1017,20 @@ footer {
         padding: 30px 20px;
     }
 
-    .details-content {
-        padding: 25px;
-        max-height: 90vh;
+    .modal-content {
+        width: 94vw;
+        max-height: 88vh;
+        padding: 24px 20px;
+        border-radius: 16px;
     }
 
-    .details-content h4 {
-        font-size: 18px;
+    .modal-body h4 {
+        font-size: 1.45rem;
+        padding-right: 28px;
+    }
+
+    .modal-body p {
+        font-size: 0.95rem;
     }
 
     .scroll-to-top {
@@ -1207,15 +1090,16 @@ footer {
         padding: 20px;
     }
 
-    .details-content {
-        max-width: 90vw;
-        padding: 20px;
+    .modal-content {
+        padding: 22px 18px;
     }
 
-    .close-details {
-        width: 35px;
-        height: 35px;
-        font-size: 20px;
+    .modal-close {
+        width: 38px;
+        height: 38px;
+        font-size: 1.35rem;
+        top: 10px;
+        right: 10px;
     }
 }
 
@@ -1231,51 +1115,4 @@ footer {
 
 .animate-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* MODAL BACKGROUND */
-.project-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-
-    display: none;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 9999;
-}
-
-/* DARK BACKDROP */
-.modal-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.8);
-}
-
-/* MODAL BOX */
-.modal-content {
-    position: relative;
-    background: #111;
-    color: #fff;
-    max-width: 900px;
-    width: 90%;
-    padding: 30px;
-    border-radius: 12px;
-    z-index: 2;
-}
-
-/* CLOSE BUTTON */
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 25px;
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
 }
