@@ -2,9 +2,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
     initializePortfolio();
+    initializeModals();
     initializeScrollToTop();
     initializeFormValidation();
-    initializeModals();
+    logPortfolioStats();
 });
 
 // ========== NAVIGATION FUNCTIONALITY ==========
@@ -123,21 +124,25 @@ function filterPortfolioItems(items, filter) {
 function initializeModals() {
     const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-    if (portfolioItems.length === 0) return;
+    if (portfolioItems.length === 0) {
+        console.log('No portfolio items found');
+        return;
+    }
+
+    console.log(`Initializing modals for ${portfolioItems.length} items`);
 
     // Open modal on project click
-    portfolioItems.forEach(item => {
+    portfolioItems.forEach((item, index) => {
         item.addEventListener('click', function(e) {
-            // Check if close button or any child of details was clicked
+            // Don't open if clicking close button
             if (e.target.closest('.close-details')) return;
-            if (e.target.closest('.portfolio-details')) return;
 
             const details = this.querySelector('.portfolio-details');
             if (details) {
                 e.stopPropagation();
                 details.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                console.log('Modal opened');
+                console.log(`Modal opened for item ${index + 1}`);
             }
         });
     });
@@ -150,7 +155,7 @@ function initializeModals() {
             const modal = e.target.closest('.portfolio-details');
             if (modal) {
                 closeModal(modal);
-                console.log('Modal closed via button');
+                console.log('Modal closed via close button');
             }
         }
     });
@@ -160,7 +165,7 @@ function initializeModals() {
         if (e.target.classList.contains('portfolio-details') && e.target.classList.contains('active')) {
             e.stopPropagation();
             closeModal(e.target);
-            console.log('Modal closed via background');
+            console.log('Modal closed via background click');
         }
     });
 
@@ -170,12 +175,12 @@ function initializeModals() {
             const activeModal = document.querySelector('.portfolio-details.active');
             if (activeModal) {
                 closeModal(activeModal);
-                console.log('Modal closed via ESC');
+                console.log('Modal closed via ESC key');
             }
         }
     });
 
-    // Prevent scroll when modal is open
+    // Prevent scroll when modal is open using MutationObserver
     const modals = document.querySelectorAll('.portfolio-details');
     modals.forEach(modal => {
         const observer = new MutationObserver(function() {
@@ -196,6 +201,7 @@ function closeModal(modal) {
         document.body.style.overflow = 'auto';
     }
 }
+
 // ========== SCROLL TO TOP BUTTON ==========
 function initializeScrollToTop() {
     const scrollToTopBtn = document.getElementById('scrollToTop');
@@ -275,6 +281,3 @@ function logPortfolioStats() {
 
     console.log('Portfolio Statistics:', categories);
 }
-
-// Call stats on load (optional)
-document.addEventListener('DOMContentLoaded', logPortfolioStats);
