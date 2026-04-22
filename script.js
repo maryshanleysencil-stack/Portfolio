@@ -1,5 +1,5 @@
 // ========== DOCUMENT READY ==========
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeNavigation();
     initializePortfolio();
     initializeModals();
@@ -15,42 +15,56 @@ function initializeNavigation() {
 
     if (!navToggle || !navLinks) return;
 
-    navToggle.addEventListener('click', function(e) {
+    navToggle.addEventListener('click', function (e) {
         e.stopPropagation();
         navLinks.classList.toggle('active');
         navToggle.classList.toggle('active');
     });
 
     navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function() {
+        link.addEventListener('click', function () {
             navLinks.classList.remove('active');
             navToggle.classList.remove('active');
         });
     });
 
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
             if (href === '#') return;
 
             e.preventDefault();
             const target = document.querySelector(href);
             if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
         });
+    });
+
+    document.addEventListener('click', function (e) {
+        if (
+            navLinks.classList.contains('active') &&
+            !navLinks.contains(e.target) &&
+            !navToggle.contains(e.target)
+        ) {
+            navLinks.classList.remove('active');
+            navToggle.classList.remove('active');
+        }
     });
 }
 
 // ========== PORTFOLIO FILTERING ==========
 function initializePortfolio() {
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    const portfolioItems = document.querySelectorAll('.portfolio-grid > .portfolio-item');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
-    if (filterBtns.length === 0) return;
+    if (!filterBtns.length || !portfolioItems.length) return;
 
     filterBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -79,7 +93,7 @@ function filterPortfolioItems(items, filter) {
 
     setTimeout(() => {
         items.forEach((item, index) => {
-            const isMatch = (filter === 'all' || item.dataset.category === filter);
+            const isMatch = filter === 'all' || item.dataset.category === filter;
 
             if (isMatch) {
                 item.classList.remove('hidden');
@@ -107,9 +121,9 @@ function filterPortfolioItems(items, filter) {
     }, 300);
 }
 
-// ========== PORTFOLIO MODAL ==========
+// ========== PORTFOLIO MODALS ==========
 function initializeModals() {
-    const items = document.querySelectorAll('.portfolio-item');
+    const items = document.querySelectorAll('.portfolio-grid > .portfolio-item');
     const modal = document.getElementById('projectModal');
     const modalBody = document.getElementById('modalBody');
     const closeBtn = document.querySelector('.modal-close');
@@ -117,38 +131,46 @@ function initializeModals() {
 
     if (!items.length || !modal || !modalBody || !closeBtn || !overlay) return;
 
-    items.forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Prevent opening modal when clicking links/buttons inside card
-            if (e.target.closest('a, button, .modal-close, .modal-overlay')) return;
+    function openModal(detailsHTML) {
+        modalBody.innerHTML = detailsHTML;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
 
-            const details = item.getAttribute('data-details');
-            if (!details) return;
-
-            modalBody.innerHTML = details;
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        });
-    });
-
-    function closeProjectModal() {
+    function closeModal() {
         modal.style.display = 'none';
+        modalBody.innerHTML = '';
         document.body.style.overflow = 'auto';
     }
 
-    closeBtn.addEventListener('click', function(e) {
+    items.forEach(item => {
+        item.addEventListener('click', function (e) {
+            if (e.target.closest('a, button')) return;
+            if (item.classList.contains('hidden')) return;
+
+            const directDetails = item.getAttribute('data-details');
+            const nestedDetailsEl = item.querySelector('.portfolio-item[data-details]');
+            const detailsHTML = directDetails || nestedDetailsEl?.getAttribute('data-details');
+
+            if (!detailsHTML) return;
+
+            openModal(detailsHTML);
+        });
+    });
+
+    closeBtn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        closeProjectModal();
+        closeModal();
     });
 
-    overlay.addEventListener('click', function() {
-        closeProjectModal();
+    overlay.addEventListener('click', function () {
+        closeModal();
     });
 
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && modal.style.display === 'flex') {
-            closeProjectModal();
+            closeModal();
         }
     });
 }
@@ -158,7 +180,7 @@ function initializeScrollToTop() {
     const scrollToTopBtn = document.getElementById('scrollToTop');
     if (!scrollToTopBtn) return;
 
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         if (window.pageYOffset > 300) {
             scrollToTopBtn.classList.add('show');
         } else {
@@ -166,8 +188,11 @@ function initializeScrollToTop() {
         }
     });
 
-    scrollToTopBtn.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTopBtn.addEventListener('click', function () {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 }
 
@@ -176,7 +201,7 @@ function initializeFormValidation() {
     const contactForm = document.querySelector('.contact-form');
     if (!contactForm) return;
 
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', function (e) {
         const inputs = this.querySelectorAll('input, textarea');
         let isValid = true;
 
@@ -193,7 +218,7 @@ function initializeFormValidation() {
     });
 
     contactForm.querySelectorAll('input, textarea').forEach(input => {
-        input.addEventListener('input', function() {
+        input.addEventListener('input', function () {
             this.classList.remove('invalid');
         });
     });
@@ -202,17 +227,22 @@ function initializeFormValidation() {
 // ========== UTIL ==========
 function smoothScrollTo(element) {
     if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
     }
 }
 
 function logPortfolioStats() {
-    const items = document.querySelectorAll('.portfolio-item');
+    const items = document.querySelectorAll('.portfolio-grid > .portfolio-item');
     const categories = {};
 
     items.forEach(item => {
         const category = item.dataset.category;
-        categories[category] = (categories[category] || 0) + 1;
+        if (category) {
+            categories[category] = (categories[category] || 0) + 1;
+        }
     });
 
     console.log('Portfolio Statistics:', categories);
