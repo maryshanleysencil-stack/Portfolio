@@ -58,7 +58,7 @@ function initializeNavigation() {
 
 // ========== PORTFOLIO FILTERING ==========
 function initializePortfolio() {
-    const portfolioItems = document.querySelectorAll('.portfolio-grid > .portfolio-item');
+    const portfolioItems = document.querySelectorAll('.portfolio-grid .portfolio-item');
     const filterBtns = document.querySelectorAll('.filter-btn');
 
     if (!filterBtns.length || !portfolioItems.length) return;
@@ -76,54 +76,36 @@ function initializePortfolio() {
         });
     });
 
-    setTimeout(() => {
-        const allBtn = document.querySelector('[data-filter="all"]');
-        if (allBtn) allBtn.click();
-    }, 200);
+    const activeBtn = document.querySelector('.filter-btn.active');
+    if (activeBtn) {
+        filterPortfolioItems(portfolioItems, activeBtn.dataset.filter);
+    }
 }
 
 function filterPortfolioItems(items, filter) {
     let visibleCount = 0;
 
     items.forEach(item => {
-        item.style.opacity = '0';
-        item.style.transform = 'scale(0.9) translateY(20px)';
-        item.style.pointerEvents = 'none';
+        const isMatch = filter === 'all' || item.dataset.category === filter;
+
+        if (isMatch) {
+            item.classList.remove('hidden');
+            item.style.display = 'block';
+            item.style.pointerEvents = 'auto';
+            visibleCount++;
+        } else {
+            item.classList.add('hidden');
+            item.style.display = 'none';
+            item.style.pointerEvents = 'none';
+        }
     });
 
-    setTimeout(() => {
-        items.forEach((item, index) => {
-            const isMatch = filter === 'all' || item.dataset.category === filter;
-
-            if (isMatch) {
-                item.classList.remove('hidden');
-                item.style.display = 'block';
-                item.style.pointerEvents = 'auto';
-                visibleCount++;
-
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'scale(1) translateY(0)';
-                }, index * 50);
-            } else {
-                item.classList.add('hidden');
-                item.style.opacity = '0';
-
-                setTimeout(() => {
-                    if (item.classList.contains('hidden')) {
-                        item.style.display = 'none';
-                    }
-                }, 400);
-            }
-        });
-
-        console.log(`Portfolio: Showing ${visibleCount} projects for "${filter}"`);
-    }, 300);
+    console.log(`Portfolio: Showing ${visibleCount} projects for "${filter}"`);
 }
 
 // ========== PORTFOLIO MODALS ==========
 function initializeModals() {
-    const items = document.querySelectorAll('.portfolio-grid > .portfolio-item');
+    const items = document.querySelectorAll('.portfolio-grid .portfolio-item');
     const modal = document.getElementById('projectModal');
     const modalBody = document.getElementById('modalBody');
     const closeBtn = document.querySelector('.modal-close');
@@ -148,10 +130,7 @@ function initializeModals() {
             if (e.target.closest('a, button')) return;
             if (item.classList.contains('hidden')) return;
 
-            const directDetails = item.getAttribute('data-details');
-            const nestedDetailsEl = item.querySelector('.portfolio-item[data-details]');
-            const detailsHTML = directDetails || nestedDetailsEl?.getAttribute('data-details');
-
+            const detailsHTML = item.getAttribute('data-details');
             if (!detailsHTML) return;
 
             openModal(detailsHTML);
@@ -235,7 +214,7 @@ function smoothScrollTo(element) {
 }
 
 function logPortfolioStats() {
-    const items = document.querySelectorAll('.portfolio-grid > .portfolio-item');
+    const items = document.querySelectorAll('.portfolio-grid .portfolio-item');
     const categories = {};
 
     items.forEach(item => {
