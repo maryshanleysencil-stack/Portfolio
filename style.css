@@ -481,14 +481,17 @@ section {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 30px 20px;
-    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
-    transform: translateY(30px);
-    transition: transform 0.3s ease;
+    padding: 25px 20px;
+    background: rgba(255, 248, 240, 0.95); /* FIXED */
+    backdrop-filter: blur(8px);
+    transform: translateY(100%);
+    transition: all 0.4s ease;
     z-index: 3;
-    color: white;
+    color: var(--dark);
+    border-top: 1px solid rgba(200,162,124,0.3);
     pointer-events: none;
 }
+
 
 .portfolio-item:hover .portfolio-overlay {
     transform: translateY(0);
@@ -513,7 +516,8 @@ section {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(247, 241, 234, 0.95); /* FIXED */
+    backdrop-filter: blur(10px);
     z-index: 2000;
     justify-content: center;
     align-items: center;
@@ -527,19 +531,17 @@ section {
 }
 
 .details-content {
-    background: transparent;
-    border-radius: 0;
-    padding: 60px;
-    max-width: 1400px;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 900px;
     width: 100%;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow-y: auto;
     position: relative;
     animation: slideUp 0.3s ease;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    display: block;
 }
 
 /* Left side - Image from portfolio item */
@@ -556,9 +558,7 @@ section {
     z-index: 0;
 }
 
-/* Get the image from the portfolio item */
-.portfolio-item img {
-    display: none;
+
 }
 
 .details-content {
@@ -575,7 +575,7 @@ section {
 
 .details-content h4 {
     font-size: 36px;
-    color: white;
+    color: var(--primary); /* FIXED */
     margin: 0 0 20px 0;
     text-transform: uppercase;
     font-family: 'Playfair Display', serif;
@@ -584,13 +584,9 @@ section {
     letter-spacing: 1px;
 }
 
-.info-block {
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    border-left: 3px solid var(--accent);
-    padding-left: 20px;
-    margin: 0;
+.info-block p,
+.info-block li {
+    color: #555; /* FIXED */
 }
 
 .info-block h5 {
@@ -636,8 +632,8 @@ section {
     top: 40px;
     right: 60px;
     background: transparent;
-    color: white;
-    border: 2px solid white;
+    color: var(--primary); /* FIXED */
+    border: 2px solid var(--primary); /* FIXED */
     width: 40px;
     height: 40px;
     border-radius: 0;
@@ -652,8 +648,8 @@ section {
 }
 
 .close-details:hover {
-    background: white;
-    color: #000;
+    background: var(--primary); /* FIXED */
+    color: white; /* FIXED */
 }
 
 /* Scrollbar styling for modal */
@@ -677,18 +673,6 @@ section {
         gap: 40px;
         padding: 40px;
         padding-top: 60px;
-    }
-
-    .details-content::before {
-        position: static;
-        transform: none;
-        width: 100%;
-        height: 400px;
-        margin-bottom: 20px;
-    }
-
-    .project-info {
-        padding-left: 0;
     }
 
     .details-content {
