@@ -107,67 +107,50 @@ function filterPortfolioItems(items, filter) {
     }, 300);
 }
 
-// ========== PORTFOLIO MODALS ==========
+// ========== PORTFOLIO MODAL ==========
 function initializeModals() {
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    const items = document.querySelectorAll('.portfolio-item');
+    const modal = document.getElementById('projectModal');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.querySelector('.modal-close');
+    const overlay = document.querySelector('.modal-overlay');
 
-    if (portfolioItems.length === 0) return;
+    if (!items.length || !modal || !modalBody || !closeBtn || !overlay) return;
 
-    portfolioItems.forEach((item) => {
+    items.forEach(item => {
         item.addEventListener('click', function(e) {
+            // Prevent opening modal when clicking links/buttons inside card
+            if (e.target.closest('a, button, .modal-close, .modal-overlay')) return;
 
-            // ❌ FIX: Prevent blocking clicks on inner elements
-            if (e.target.closest('.portfolio-details') || e.target.closest('.close-details')) return;
+            const details = item.getAttribute('data-details');
+            if (!details) return;
 
-            const details = this.querySelector('.portfolio-details');
-            const detailsContent = this.querySelector('.details-content');
-            const img = this.querySelector('img');
-
-            if (details) {
-                e.stopPropagation();
-
-                // ❌ FIX: REMOVE background image override (this was breaking layout + clicks)
-                if (detailsContent) {
-                    detailsContent.style.backgroundImage = 'none';
-                }
-
-                details.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
+            modalBody.innerHTML = details;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         });
     });
 
-    // Close modal (button)
-    document.addEventListener('click', function(e) {
-        if (e.target.closest('.close-details')) {
-            e.preventDefault();
-            e.stopPropagation();
-            const modal = e.target.closest('.portfolio-details');
-            if (modal) closeModal(modal);
-        }
-    });
-
-    // Close modal (background)
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('portfolio-details') && e.target.classList.contains('active')) {
-            closeModal(e.target);
-        }
-    });
-
-    // ESC key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const activeModal = document.querySelector('.portfolio-details.active');
-            if (activeModal) closeModal(activeModal);
-        }
-    });
-}
-
-function closeModal(modal) {
-    if (modal) {
-        modal.classList.remove('active');
+    function closeProjectModal() {
+        modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
+
+    closeBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeProjectModal();
+    });
+
+    overlay.addEventListener('click', function() {
+        closeProjectModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeProjectModal();
+        }
+    });
 }
 
 // ========== SCROLL TO TOP ==========
