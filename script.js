@@ -86,21 +86,40 @@ function filterPortfolioItems(items, filter) {
     let visibleCount = 0;
 
     items.forEach(item => {
-        const isMatch = filter === 'all' || item.dataset.category === filter;
-
-        if (isMatch) {
-            item.classList.remove('hidden');
-            item.style.display = 'block';
-            item.style.pointerEvents = 'auto';
-            visibleCount++;
-        } else {
-            item.classList.add('hidden');
-            item.style.display = 'none';
-            item.style.pointerEvents = 'none';
-        }
+        item.style.opacity = '0';
+        item.style.transform = 'scale(0.95) translateY(16px)';
+        item.style.pointerEvents = 'none';
     });
 
-    console.log(`Portfolio: Showing ${visibleCount} projects for "${filter}"`);
+    setTimeout(() => {
+        items.forEach((item, index) => {
+            const isMatch = filter === 'all' || item.dataset.category === filter;
+
+            if (isMatch) {
+                item.classList.remove('hidden');
+                item.style.display = 'block';
+                item.style.pointerEvents = 'auto';
+                visibleCount++;
+
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'scale(1) translateY(0)';
+                }, index * 60);
+            } else {
+                item.classList.add('hidden');
+                item.style.opacity = '0';
+                item.style.transform = 'scale(0.95) translateY(16px)';
+
+                setTimeout(() => {
+                    if (item.classList.contains('hidden')) {
+                        item.style.display = 'none';
+                    }
+                }, 350);
+            }
+        });
+
+        console.log(`Portfolio: Showing ${visibleCount} projects for "${filter}"`);
+    }, 180);
 }
 
 // ========== PORTFOLIO MODALS ==========
