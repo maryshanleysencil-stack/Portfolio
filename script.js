@@ -127,13 +127,16 @@ function initializeModals() {
     const items = document.querySelectorAll('.portfolio-grid .portfolio-item');
     const modal = document.getElementById('projectModal');
     const modalBody = document.getElementById('modalBody');
+    const modalImage = document.getElementById('modalImage');
     const closeBtn = document.querySelector('.modal-close');
     const overlay = document.querySelector('.modal-overlay');
 
-    if (!items.length || !modal || !modalBody || !closeBtn || !overlay) return;
+    if (!items.length || !modal || !modalBody || !modalImage || !closeBtn || !overlay) return;
 
-    function openModal(detailsHTML) {
+    function openModal(detailsHTML, imageSrc, imageAlt) {
         modalBody.innerHTML = detailsHTML;
+        modalImage.src = imageSrc || '';
+        modalImage.alt = imageAlt || 'Project preview';
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
@@ -141,6 +144,8 @@ function initializeModals() {
     function closeModal() {
         modal.style.display = 'none';
         modalBody.innerHTML = '';
+        modalImage.src = '';
+        modalImage.alt = '';
         document.body.style.overflow = 'auto';
     }
 
@@ -150,9 +155,13 @@ function initializeModals() {
             if (item.classList.contains('hidden')) return;
 
             const detailsHTML = item.getAttribute('data-details');
+            const image = item.querySelector('img');
+            const imageSrc = image ? image.getAttribute('src') : '';
+            const imageAlt = image ? image.getAttribute('alt') : '';
+
             if (!detailsHTML) return;
 
-            openModal(detailsHTML);
+            openModal(detailsHTML, imageSrc, imageAlt);
         });
     });
 
