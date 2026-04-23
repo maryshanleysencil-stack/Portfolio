@@ -658,6 +658,17 @@ section {
     .modal-body p {
         font-size: 1rem;
     }
+    .modal-title-small {
+    font-size: 2.45rem !important;
+    line-height: 1.06 !important;
+    margin-bottom: 22px !important;
+}
+
+.modal-text-small {
+    font-size: 0.98rem !important;
+    line-height: 1.65 !important;
+    margin-bottom: 12px !important;
+}
 }
 /* ========== TESTIMONIALS SECTION ========== */
 #testimonials {
