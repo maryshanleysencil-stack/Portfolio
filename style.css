@@ -513,7 +513,7 @@ section {
 .modal-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(20, 16, 14, 0.78);
+    background: rgba(47, 35, 32, 0.45);
     backdrop-filter: blur(6px);
 }
 
@@ -523,11 +523,11 @@ section {
     width: min(1200px, 95vw);
     max-height: 90vh;
     overflow: hidden;
-    background: #111;
-    color: #fff;
-    border-radius: 18px;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #fdf8f3;
+    color: var(--dark);
+    border-radius: 22px;
+    box-shadow: 0 30px 80px rgba(107, 79, 79, 0.22);
+    border: 1px solid rgba(200, 162, 124, 0.35);
     animation: modalPop 0.25s ease;
 }
 
@@ -538,9 +538,9 @@ section {
 }
 
 .modal-image-wrap {
-    background: #0d0d0d;
+    background: #efe5da;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     overflow: hidden;
 }
@@ -553,40 +553,43 @@ section {
 }
 
 .modal-text {
-    background: #111;
-    padding: 48px 42px;
+    background: linear-gradient(180deg, #fffaf5 0%, #f8efe6 100%);
+    padding: 46px 40px;
     overflow-y: auto;
+    border-left: 1px solid rgba(200, 162, 124, 0.25);
 }
 
 .modal-body h4 {
     font-size: 3rem;
     line-height: 1.08;
     margin-bottom: 28px;
-    color: #f5f1ec;
+    color: var(--primary);
+    font-family: 'Playfair Display', serif;
 }
 
 .modal-body p {
-    font-size: 1.2rem;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.82);
-    margin-bottom: 18px;
+    font-size: 1.08rem;
+    line-height: 1.85;
+    color: #5f524b;
+    margin-bottom: 16px;
 }
 
 .modal-body strong {
-    color: #ff3b3b;
+    color: var(--primary);
     font-weight: 700;
 }
 
 .modal-close {
     position: absolute;
-    top: 18px;
-    right: 18px;
-    width: 54px;
-    height: 54px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.75);
-    font-size: 2rem;
+    top: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(107, 79, 79, 0.08);
+    color: var(--primary);
+    font-size: 1.8rem;
     line-height: 1;
     cursor: pointer;
     z-index: 5;
@@ -594,16 +597,21 @@ section {
 }
 
 .modal-close:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
+    background: var(--primary);
+    color: white;
+    transform: rotate(90deg);
 }
 
 .modal-text::-webkit-scrollbar {
     width: 8px;
 }
 
+.modal-text::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 .modal-text::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.18);
+    background: rgba(200, 162, 124, 0.9);
     border-radius: 999px;
 }
 
@@ -634,6 +642,8 @@ section {
 
     .modal-text {
         padding: 28px 22px;
+        border-left: none;
+        border-top: 1px solid rgba(200, 162, 124, 0.25);
     }
 
     .modal-body h4 {
